@@ -1,0 +1,251 @@
+.healthcare-section {
+  margin: 40px 0;
+}
+
+.healthcare-section h3 {
+  color: #1a4d7a;
+  margin: 30px 0 20px 0;
+  font-size: 24px;
+}
+
+.hospitals-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.hospital-card {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: box-shadow 0.3s ease;
+}
+
+.hospital-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.hospital-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.hospital-header h4 {
+  margin: 0;
+  color: #1a4d7a;
+  font-size: 18px;
+}
+
+.rating {
+  background: #fff3cd;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.stars {
+  color: #ffc107;
+}
+
+.hospital-type {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 15px;
+}
+
+.hospital-details {
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 6px;
+  margin: 15px 0;
+}
+
+.hospital-details p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.services-list {
+  margin: 15px 0;
+}
+
+.services-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.services-list li {
+  padding: 6px 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.clinics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.clinic-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-top: 3px solid #4a8f5e;
+}
+
+.clinic-card h4 {
+  color: #1a4d7a;
+  margin: 0 0 12px 0;
+}
+
+.clinic-card p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.services {
+  margin: 15px 0;
+}
+
+.services ul {
+  list-style: none;
+  padding: 0;
+  margin: 10px 0;
+}
+
+.services li {
+  padding: 4px 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.ambulance-table {
+  overflow-x: auto;
+  margin: 20px 0;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+thead {
+  background-color: #1a4d7a;
+  color: white;
+}
+
+th {
+  padding: 15px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+td {
+  padding: 15px;
+  border-bottom: 1px solid #e0e7e9;
+  font-size: 14px;
+}
+
+td.phone {
+  color: #0099cc;
+  font-weight: 600;
+}
+
+.status-active {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.benefit-card {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border-left: 4px solid #4a8f5e;
+}
+
+.benefit-card h4 {
+  color: #1a4d7a;
+  margin-bottom: 10px;
+}
+
+.benefit-card p {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+}
+
+.health-tips {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-top: 40px;
+}
+
+.health-tips h3 {
+  color: #1a4d7a;
+  margin-top: 0;
+}
+
+.health-tips ul {
+  list-style: none;
+  padding: 0;
+}
+
+.health-tips li {
+  padding: 10px 0;
+  padding-left: 25px;
+  position: relative;
+  color: #333;
+  font-size: 14px;
+}
+
+.health-tips li:before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #4a8f5e;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .hospitals-grid,
+  .clinics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ambulance-table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 10px;
+  }
+}
