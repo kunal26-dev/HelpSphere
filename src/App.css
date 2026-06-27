@@ -51,6 +51,16 @@
   transform: translateY(-2px);
 }
 
+/* Location Bar */
+.location-bar {
+  background: #f9fdf8;
+  border-bottom: 1px solid #d4edda;
+  padding: 15px 20px;
+  position: sticky;
+  top: 70px;
+  z-index: 99;
+}
+
 /* Footer */
 .footer {
   background: linear-gradient(135deg, #2d7a5f 0%, #1b5e3f 100%);
