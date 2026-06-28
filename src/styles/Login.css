@@ -1,0 +1,118 @@
+.login-page {
+  align-items: center;
+  background:
+    linear-gradient(rgba(12, 48, 42, 0.74), rgba(18, 83, 69, 0.7)),
+    url('../assets/hero.png');
+  background-position: center;
+  background-size: cover;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 32px 20px;
+}
+
+.login-panel {
+  background: rgba(255, 255, 255, 0.96);
+  border-radius: 8px;
+  box-shadow: 0 18px 40px rgba(10, 39, 34, 0.22);
+  display: grid;
+  gap: 28px;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  max-width: 980px;
+  padding: 34px;
+  width: 100%;
+}
+
+.login-intro {
+  align-self: center;
+}
+
+.login-kicker {
+  color: #1b5e3f;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+}
+
+.login-intro h1 {
+  color: #173f35;
+  font-size: 38px;
+  line-height: 1.15;
+  margin-bottom: 16px;
+}
+
+.login-intro p {
+  color: #4b635d;
+  font-size: 16px;
+}
+
+.login-form {
+  background: #f8fbf9;
+  border: 1px solid #dce9e3;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.role-toggle {
+  background: #e5f1ec;
+  border-radius: 8px;
+  display: grid;
+  gap: 6px;
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: 22px;
+  padding: 6px;
+}
+
+.role-toggle button {
+  background: transparent;
+  border-radius: 6px;
+  color: #295347;
+  font-weight: 700;
+  padding: 12px;
+}
+
+.role-toggle button.active {
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(23, 63, 53, 0.12);
+  color: #123c31;
+}
+
+.login-error {
+  background: #f8d7da;
+  border-radius: 6px;
+  color: #721c24;
+  font-size: 14px;
+  margin-bottom: 16px;
+  padding: 12px;
+}
+
+.login-submit {
+  width: 100%;
+}
+
+.demo-credentials {
+  background: #ffffff;
+  border-left: 4px solid #4a8f5e;
+  border-radius: 6px;
+  color: #36534b;
+  font-size: 13px;
+  margin-top: 18px;
+  padding: 14px;
+}
+
+.demo-credentials p {
+  margin: 6px 0 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .login-panel {
+    grid-template-columns: 1fr;
+    padding: 24px;
+  }
+
+  .login-intro h1 {
+    font-size: 30px;
+  }
+}

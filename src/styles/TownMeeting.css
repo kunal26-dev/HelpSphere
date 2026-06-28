@@ -4,6 +4,16 @@
   gap: 10px;
 }
 
+.meeting-message {
+  background: #e8f5e9;
+  border-left: 4px solid #2d7a5f;
+  border-radius: 8px;
+  color: #1b5e3f;
+  font-weight: 600;
+  margin: 20px 0;
+  padding: 14px;
+}
+
 .meeting-form-container {
   background: white;
   padding: 30px;
@@ -104,6 +114,21 @@
 .status-badge.completed {
   background-color: #d4edda;
   color: #155724;
+}
+
+.status-badge.requested {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.status-badge.approved {
+  background-color: #d1ecf1;
+  color: #0c5460;
+}
+
+.status-badge.rejected {
+  background-color: #f8d7da;
+  color: #721c24;
 }
 
 .meeting-card h4 {

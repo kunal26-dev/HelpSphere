@@ -1,7 +1,7 @@
 .hero-section {
   text-align: center;
   padding: 80px 20px 50px;
-  background: aquamarine;
+  background: rgb(121, 109, 57);
   border-radius: 12px;
   margin-bottom: 50px;
   border: 2px solid rgba(39, 167, 69, 0.2);
@@ -10,7 +10,7 @@
 
 .hero-section h1 {
   font-size: 48px;
-  background: linear-gradient(135deg, #1b5e3f 0%, #2d7a5f 100%);
+  background: linear-gradient(135deg, #d1890d 0%, #a19c8d 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -20,14 +20,14 @@
 
 .hero-section > p:first-of-type {
   font-size: 20px;
-  color: #2d7a5f;
+  color: #fcfcfc;
   margin-bottom: 12px;
   font-weight: 600;
 }
 
 .hero-section .subtitle {
   font-size: 15px;
-  color: #4a6741;
+  color: #ffffff;
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;

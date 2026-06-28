@@ -21,6 +21,16 @@
   font-weight: 600;
 }
 
+.portal-message {
+  background: #e8f5e9;
+  border-left: 4px solid #2d7a5f;
+  border-radius: 8px;
+  color: #1b5e3f;
+  font-weight: 600;
+  margin: 20px 0;
+  padding: 14px;
+}
+
 .complaint-form {
   display: flex;
   flex-direction: column;

@@ -1,36 +1,46 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import '../styles/ProblemPortal.css'
 
-export default function ProblemPortal() {
-  const [complaints, setComplaints] = useState([
-    {
-      id: 1,
-      type: 'Road Damage',
-      location: 'Main Street',
-      description: 'Large pothole causing traffic issues',
-      status: 'resolved',
-      date: '2026-06-20',
-      escalated: false
-    },
-    {
-      id: 2,
-      type: 'Broken Streetlight',
-      location: 'Park Road',
-      description: 'Streetlight not working for 2 weeks',
-      status: 'pending',
-      date: '2026-06-18',
-      escalated: false
-    }
-  ])
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
 
+async function readJsonResponse(response) {
+  const text = await response.text()
+  return text ? JSON.parse(text) : {}
+}
+
+export default function ProblemPortal({ currentUser }) {
+  const [complaints, setComplaints] = useState([])
+  const [message, setMessage] = useState('')
   const [formData, setFormData] = useState({
     type: '',
     location: '',
     description: '',
     photo: null
   })
-
   const [preview, setPreview] = useState(null)
+
+  useEffect(() => {
+    async function loadComplaints() {
+      try {
+        const params = new URLSearchParams({
+          role: currentUser.role,
+          userId: currentUser.id
+        })
+        const response = await fetch(`${API_BASE_URL}/api/complaints?${params}`)
+        const data = await readJsonResponse(response)
+
+        if (!response.ok) {
+          throw new Error(data.message || 'Unable to load complaints')
+        }
+
+        setComplaints(data)
+      } catch (error) {
+        setMessage(error.message)
+      }
+    }
+
+    loadComplaints()
+  }, [currentUser])
 
   const handlePhotoChange = (e) => {
     const file = e.target.files[0]
@@ -44,35 +54,40 @@ export default function ProblemPortal() {
     }
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    if (formData.type && formData.location && formData.description) {
-      const newComplaint = {
-        id: complaints.length + 1,
-        type: formData.type,
-        location: formData.location,
-        description: formData.description,
-        status: 'pending',
-        date: new Date().toISOString().split('T')[0],
-        escalated: false
+    setMessage('')
+
+    if (!formData.type || !formData.location || !formData.description) {
+      return
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/complaints`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId: currentUser.id,
+          submitterName: currentUser.name,
+          type: formData.type,
+          location: formData.location,
+          description: formData.description
+        })
+      })
+      const data = await readJsonResponse(response)
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Unable to submit complaint')
       }
-      setComplaints([newComplaint, ...complaints])
+
+      setComplaints([data, ...complaints])
       setFormData({ type: '', location: '', description: '', photo: null })
       setPreview(null)
-      alert('Complaint submitted successfully!')
-    }
-  }
-
-  const checkEscalation = (index) => {
-    const updated = [...complaints]
-    if (updated[index].status === 'pending') {
-      const daysPassed = Math.floor((new Date() - new Date(updated[index].date)) / (1000 * 60 * 60 * 24))
-      if (daysPassed > 7) {
-        updated[index].escalated = true
-        updated[index].status = 'escalated'
-        setComplaints(updated)
-        alert('Complaint escalated to Block Development Officer!')
-      }
+      setMessage('Complaint sent to government officials.')
+    } catch (error) {
+      setMessage(error.message)
     }
   }
 
@@ -82,13 +97,19 @@ export default function ProblemPortal() {
         <h2 className="section-title">Problem Portal</h2>
         <p className="section-subtitle">Report civic issues and track their resolution</p>
 
+        {message && (
+          <p className="portal-message">
+            {message}
+          </p>
+        )}
+
         <div className="portal-content">
           <div className="form-section">
             <h3>Report a Problem</h3>
             <form onSubmit={handleSubmit} className="complaint-form">
               <div className="form-group">
                 <label>Problem Type</label>
-                <select value={formData.type} onChange={(e) => setFormData({...formData, type: e.target.value})} required>
+                <select value={formData.type} onChange={(e) => setFormData({ ...formData, type: e.target.value })} required>
                   <option value="">Select Type</option>
                   <option value="Road Damage">Road Damage</option>
                   <option value="Broken Streetlight">Broken Streetlight</option>
@@ -100,12 +121,12 @@ export default function ProblemPortal() {
 
               <div className="form-group">
                 <label>Location</label>
-                <input type="text" value={formData.location} onChange={(e) => setFormData({...formData, location: e.target.value})} placeholder="Enter exact location" required />
+                <input type="text" value={formData.location} onChange={(e) => setFormData({ ...formData, location: e.target.value })} placeholder="Enter exact location" required />
               </div>
 
               <div className="form-group">
                 <label>Description</label>
-                <textarea value={formData.description} onChange={(e) => setFormData({...formData, description: e.target.value})} placeholder="Describe the problem..." required></textarea>
+                <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} placeholder="Describe the problem..." required></textarea>
               </div>
 
               <div className="form-group">
@@ -119,22 +140,18 @@ export default function ProblemPortal() {
           </div>
 
           <div className="complaints-section">
-            <h3>Tracked Complaints</h3>
+            <h3>{currentUser.role === 'official' ? 'All Complaints' : 'Your Complaints'}</h3>
             <div className="complaints-list">
-              {complaints.map((complaint, index) => (
+              {complaints.map((complaint) => (
                 <div key={complaint.id} className="complaint-card">
                   <div className="complaint-header">
                     <h4>{complaint.type}</h4>
                     <span className={`badge badge-${complaint.status}`}>{complaint.status}</span>
                   </div>
+                  <p><strong>Submitted By:</strong> {complaint.submitterName}</p>
                   <p><strong>Location:</strong> {complaint.location}</p>
                   <p><strong>Description:</strong> {complaint.description}</p>
                   <p><strong>Reported:</strong> {complaint.date}</p>
-                  {complaint.status === 'pending' && (
-                    <button onClick={() => checkEscalation(index)} className="btn btn-secondary btn-small">
-                      Check Escalation
-                    </button>
-                  )}
                 </div>
               ))}
             </div>
@@ -143,9 +160,9 @@ export default function ProblemPortal() {
 
         <div className="info-box">
           <h4>Escalation Process</h4>
-          <p>• If your complaint is not resolved within 7 days, it will automatically be escalated to the Block Development Officer</p>
-          <p>• Photos help us identify and resolve issues faster</p>
-          <p>• You can track your complaint status anytime on this portal</p>
+          <p>If your complaint is not resolved within 7 days, it can be escalated to the Block Development Officer.</p>
+          <p>Photos help officials identify and resolve issues faster.</p>
+          <p>Government officials can view submitted complaints from the official dashboard.</p>
         </div>
       </div>
     </main>
