@@ -2,7 +2,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, #f0f8f5 0%, #f5f5f5 50%, #e8f5e9 100%);
+  background: rgb(109, 207, 168);
 }
 
 /* Navbar */

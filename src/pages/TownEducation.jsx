@@ -69,29 +69,29 @@ export default function TownEducation() {
     {
       id: 9,
       name: 'Sunrise Public School',
-      principal: 'Deepak Yadav',
+      principal: 'Hrishikesh Sharma',
       address: 'Ring Road',
       contact: '9876543218',
       seats: 95
     },
     {
       id: 10,
-      name: 'National Model School',
+      name: 'Delhi Public School',
       principal: 'Kavita Sharma',
-      address: 'Town Center',
+      address: 'Subhash Nagar',
       contact: '9876543219',
-      seats: 130
+      seats: 30
     }
   ]
 
   return (
     <main>
-      <div className="container">
-        <h2 className="section-title">
+      <div className="education-container">
+        <h2 align ="center "className="section-title" >
           🎓 Town Education Services
         </h2>
 
-        <p className="section-subtitle">
+        <p className="section-subtitle" align="center">
           Schools and educational facilities in the town
         </p>
 

@@ -2,10 +2,38 @@
   margin: 40px 0;
 }
 
+.education-container {
+  min-height: 100vh;
+
+  background:
+    linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+    url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_CF5IGd82KNvrOQ5XilA5xsb5usv8csayFIMkLu54Eg&s=10');
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  padding: 20px;
+}
+
+.section-title{
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-size: 50px;
+  color: #223f48;
+}
+.section-subtitle{
+   font-size: 34px;
+   color: #432828;
+   font-weight: 850;
+   text-align: center;
+}
+
 .education-section h3 {
-  color: #1a4d7a;
+  color: rgb(0, 0, 0);
   margin: 30px 0 20px 0;
-  font-size: 24px;
+  font-size: 35px;
+  text-align: center;
+ 
 }
 
 .schools-grid {
@@ -299,4 +327,8 @@
   .school-actions {
     flex-direction: column;
   }
+}
+.section-subtitle{
+  color: #333;
+  
 }
