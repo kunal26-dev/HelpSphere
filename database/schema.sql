@@ -16,52 +16,13 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO users (
-  name,
-  email,
-  password,
-  role,
-  department,
-  designation,
-  phone,
-  address
-) VALUES
-  (
-    'Ram Niwas',
-    'official@helpsphere.local',
-    'official123',
-    'official',
-    'Gram Panchayat',
-    'Gram Pradhan',
-    '9876500001',
-    'Municipal Office'
-  ),
-  (
-    'Asha Devi',
-    'member@helpsphere.local',
-    'member123',
-    'member',
-    NULL,
-    'Town Member',
-    '9876500002',
-    'Shyampur'
-  )
-ON DUPLICATE KEY UPDATE
-  name = VALUES(name),
-  password = VALUES(password),
-  role = VALUES(role),
-  department = VALUES(department),
-  designation = VALUES(designation),
-  phone = VALUES(phone),
-  address = VALUES(address),
-  is_active = TRUE;
-
 CREATE TABLE IF NOT EXISTS complaints (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
   type VARCHAR(100) NOT NULL,
   location VARCHAR(150) NOT NULL,
   description TEXT NOT NULL,
+  photo_url LONGTEXT,
   status ENUM('pending', 'resolved', 'escalated') NOT NULL DEFAULT 'pending',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (user_id) REFERENCES users(id)

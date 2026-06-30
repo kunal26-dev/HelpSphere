@@ -154,28 +154,3 @@ export const meetings = [
     status: 'approved'
   }
 ]
-
-export const seedUsers = [
-  {
-    id: 1,
-    name: 'Ram Niwas',
-    email: 'official@helpsphere.local',
-    password: 'official123',
-    role: 'official',
-    department: 'Gram Panchayat',
-    designation: 'Gram Pradhan',
-    phone: '9876500001',
-    isActive: true
-  },
-  {
-    id: 2,
-    name: 'Asha Devi',
-    email: 'member@helpsphere.local',
-    password: 'member123',
-    role: 'member',
-    department: null,
-    designation: 'Town Member',
-    phone: '9876500002',
-    isActive: true
-  }
-]

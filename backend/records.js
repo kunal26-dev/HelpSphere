@@ -9,6 +9,7 @@ function normalizeComplaint(row) {
     type: row.type,
     location: row.location,
     description: row.description,
+    photo: row.photo ?? row.photo_url ?? null,
     status: row.status,
     date: row.created_at
       ? new Date(row.created_at).toISOString().split('T')[0]
@@ -73,6 +74,7 @@ export async function createComplaint(payload) {
     type: payload.type,
     location: payload.location,
     description: payload.description,
+    photo: payload.photo || null,
     status: 'pending',
     date: new Date().toISOString().split('T')[0],
     escalated: false
@@ -83,9 +85,15 @@ export async function createComplaint(payload) {
   if (pool) {
     try {
       const [result] = await pool.execute(
-        `INSERT INTO complaints (user_id, type, location, description, status)
-         VALUES (?, ?, ?, ?, 'pending')`,
-        [payload.userId, payload.type, payload.location, payload.description]
+        `INSERT INTO complaints (user_id, type, location, description, photo_url, status)
+         VALUES (?, ?, ?, ?, ?, 'pending')`,
+        [
+          payload.userId,
+          payload.type,
+          payload.location,
+          payload.description,
+          payload.photo || null
+        ]
       )
 
       complaint.id = result.insertId

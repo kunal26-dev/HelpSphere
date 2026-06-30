@@ -80,6 +80,37 @@
   margin: 8px 0;
 }
 
+.dashboard-photo {
+  aspect-ratio: 16 / 10;
+  border: 1px solid #dce9e3;
+  border-radius: 8px;
+  display: block;
+  margin-top: 12px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.town-info-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.compact-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.compact-list span {
+  background: #f4faf7;
+  border: 1px solid #dce9e3;
+  border-radius: 6px;
+  color: #36534b;
+  font-size: 13px;
+  padding: 8px 10px;
+}
+
 .status-actions {
   display: flex;
   flex-wrap: wrap;

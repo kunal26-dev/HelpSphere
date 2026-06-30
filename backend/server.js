@@ -1,5 +1,5 @@
 import http from 'node:http'
-import { loginUser } from './auth.js'
+import { loginUser, signupUser } from './auth.js'
 import { hospitals, schools } from './data.js'
 import { getDatabaseStatus } from './db.js'
 import {
@@ -16,7 +16,7 @@ const PORT = process.env.PORT || 5050
 function sendJson(res, statusCode, payload) {
   res.writeHead(statusCode, {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+    'Access-Control-Allow-Methods': 'GET,POST,PATCH,OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json'
   })
@@ -82,6 +82,30 @@ const server = http.createServer(async (req, res) => {
     } catch (error) {
       sendJson(res, 500, {
         message: 'Unable to process login.'
+      })
+    }
+    return
+  }
+
+  if (req.method === 'POST' && url.pathname === '/api/signup') {
+    try {
+      const payload = await readJson(req)
+      const result = await signupUser(payload)
+
+      if (!result.ok) {
+        sendJson(res, result.status, {
+          message: result.message
+        })
+        return
+      }
+
+      sendJson(res, 201, {
+        user: result.user,
+        source: result.source
+      })
+    } catch (error) {
+      sendJson(res, 500, {
+        message: 'Unable to create account.'
       })
     }
     return

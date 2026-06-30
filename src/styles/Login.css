@@ -91,19 +91,16 @@
   width: 100%;
 }
 
-.demo-credentials {
-  background: #ffffff;
-  border-left: 4px solid #4a8f5e;
-  border-radius: 6px;
+.auth-switch {
   color: #36534b;
-  font-size: 13px;
-  margin-top: 18px;
-  padding: 14px;
+  font-size: 14px;
+  margin: 18px 0 0;
+  text-align: center;
 }
 
-.demo-credentials p {
-  margin: 6px 0 0;
-  overflow-wrap: anywhere;
+.auth-switch a {
+  color: #1b5e3f;
+  font-weight: 700;
 }
 
 @media (max-width: 760px) {

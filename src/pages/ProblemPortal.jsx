@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
+import { apiUrl } from '../api'
 import '../styles/ProblemPortal.css'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
 
 async function readJsonResponse(response) {
   const text = await response.text()
@@ -26,7 +25,7 @@ export default function ProblemPortal({ currentUser }) {
           role: currentUser.role,
           userId: currentUser.id
         })
-        const response = await fetch(`${API_BASE_URL}/api/complaints?${params}`)
+        const response = await fetch(apiUrl(`/api/complaints?${params}`))
         const data = await readJsonResponse(response)
 
         if (!response.ok) {
@@ -63,7 +62,7 @@ export default function ProblemPortal({ currentUser }) {
     }
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/complaints`, {
+      const response = await fetch(apiUrl('/api/complaints'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -73,7 +72,8 @@ export default function ProblemPortal({ currentUser }) {
           submitterName: currentUser.name,
           type: formData.type,
           location: formData.location,
-          description: formData.description
+          description: formData.description,
+          photo: preview
         })
       })
       const data = await readJsonResponse(response)
@@ -152,6 +152,9 @@ export default function ProblemPortal({ currentUser }) {
                   <p><strong>Location:</strong> {complaint.location}</p>
                   <p><strong>Description:</strong> {complaint.description}</p>
                   <p><strong>Reported:</strong> {complaint.date}</p>
+                  {complaint.photo && (
+                    <img src={complaint.photo} alt={complaint.type} className="photo-preview" />
+                  )}
                 </div>
               ))}
             </div>

@@ -1,18 +1,7 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { apiUrl } from '../api'
 import '../styles/Login.css'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
-
-const credentials = {
-  official: {
-    email: 'official@helpsphere.local',
-    password: 'official123'
-  },
-  member: {
-    email: 'member@helpsphere.local',
-    password: 'member123'
-  }
-}
 
 async function readJsonResponse(response) {
   const text = await response.text()
@@ -31,16 +20,12 @@ async function readJsonResponse(response) {
 }
 
 export default function Login({ onLogin }) {
-  const [role, setRole] = useState('official')
-  const [formData, setFormData] = useState(credentials.official)
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  })
   const [message, setMessage] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const handleRoleChange = (nextRole) => {
-    setRole(nextRole)
-    setFormData(credentials[nextRole])
-    setMessage('')
-  }
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -48,15 +33,14 @@ export default function Login({ onLogin }) {
     setMessage('')
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/login`, {
+      const response = await fetch(apiUrl('/api/login'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           email: formData.email,
-          password: formData.password,
-          role
+          password: formData.password
         })
       })
 
@@ -85,29 +69,11 @@ export default function Login({ onLogin }) {
           <p className="login-kicker">HelpSphere Access</p>
           <h1>Login to Town Management Portal</h1>
           <p>
-            Choose your access type to continue as a government official
-            or registered town member.
+            Sign in with the email and password used during signup.
           </p>
         </div>
 
         <form className="login-form" onSubmit={handleSubmit}>
-          <div className="role-toggle" aria-label="Select login role">
-            <button
-              type="button"
-              className={role === 'official' ? 'active' : ''}
-              onClick={() => handleRoleChange('official')}
-            >
-              Govt Official
-            </button>
-            <button
-              type="button"
-              className={role === 'member' ? 'active' : ''}
-              onClick={() => handleRoleChange('member')}
-            >
-              Member
-            </button>
-          </div>
-
           <label htmlFor="email">Email</label>
           <input
             id="email"
@@ -142,11 +108,9 @@ export default function Login({ onLogin }) {
             {isSubmitting ? 'Signing in...' : 'Login'}
           </button>
 
-          <div className="demo-credentials">
-            <strong>Initial credentials</strong>
-            <p>Official: official@helpsphere.local / official123</p>
-            <p>Member: member@helpsphere.local / member123</p>
-          </div>
+          <p className="auth-switch">
+            New here? <Link to="/signup">Create an account</Link>
+          </p>
         </form>
       </section>
     </main>

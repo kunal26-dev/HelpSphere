@@ -5,6 +5,7 @@ import './App.css'
 import GovtDashboard from './pages/GovtDashboard'
 import Home from './pages/Home'
 import Login from './pages/Login'
+import Signup from './pages/Signup'
 import ProblemPortal from './pages/ProblemPortal'
 import NewSchemes from './pages/NewSchemes'
 import TownMeeting from './pages/TownMeeting'
@@ -36,8 +37,9 @@ function App() {
     return (
       <Router>
         <Routes>
+          <Route path="/signup" element={<Signup onSignup={handleLogin} />} />
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/signup" replace />} />
         </Routes>
       </Router>
     )
@@ -81,6 +83,15 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route
+              path="/signup"
+              element={
+                <Navigate
+                  to={currentUser.role === 'official' ? '/dashboard' : '/'}
+                  replace
+                />
+              }
+            />
             <Route path="/problems" element={<ProblemPortal currentUser={currentUser} />} />
             <Route path="/schemes" element={<NewSchemes />} />
             <Route path="/meeting" element={<TownMeeting currentUser={currentUser} />} />

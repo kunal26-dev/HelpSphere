@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
+import { apiUrl } from '../api'
 import '../styles/GovtDashboard.css'
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
 
 async function readJsonResponse(response) {
   const text = await response.text()
@@ -22,6 +21,8 @@ async function readJsonResponse(response) {
 export default function GovtDashboard({ currentUser }) {
   const [complaints, setComplaints] = useState([])
   const [meetings, setMeetings] = useState([])
+  const [schools, setSchools] = useState([])
+  const [hospitals, setHospitals] = useState([])
   const [message, setMessage] = useState('')
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function GovtDashboard({ currentUser }) {
         userId: currentUser.id
       })
 
-      const [complaintsError, meetingsError] = await Promise.all([
+      const dashboardErrors = await Promise.all([
         loadDashboardResource(
           `/api/complaints?${params}`,
           setComplaints,
@@ -41,10 +42,20 @@ export default function GovtDashboard({ currentUser }) {
           `/api/meetings?${params}`,
           setMeetings,
           'Meetings'
+        ),
+        loadDashboardResource(
+          '/api/schools',
+          setSchools,
+          'Schools'
+        ),
+        loadDashboardResource(
+          '/api/hospitals',
+          setHospitals,
+          'Healthcare'
         )
       ])
 
-      const errors = [complaintsError, meetingsError].filter(Boolean)
+      const errors = dashboardErrors.filter(Boolean)
 
       if (errors.length > 0) {
         setMessage(errors.join(' '))
@@ -58,7 +69,7 @@ export default function GovtDashboard({ currentUser }) {
 
   const loadDashboardResource = async (path, setItems, label) => {
     try {
-      const response = await fetch(`${API_BASE_URL}${path}`)
+      const response = await fetch(apiUrl(path))
       const data = await readJsonResponse(response)
 
       if (!response.ok) {
@@ -88,7 +99,7 @@ export default function GovtDashboard({ currentUser }) {
 
   const updateStatus = async (path, payload) => {
     setMessage('')
-    const response = await fetch(`${API_BASE_URL}${path}`, {
+    const response = await fetch(apiUrl(path), {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json'
@@ -109,12 +120,15 @@ export default function GovtDashboard({ currentUser }) {
           <div>
             <h2 className="section-title">Government Official Dashboard</h2>
             <p className="section-subtitle">
-              Review submitted problems and meeting requests from town members.
+              Review submitted problems, meeting requests, and town services.
             </p>
           </div>
           <div className="dashboard-summary">
             <span>{complaints.length} Problems</span>
+            <span>{complaints.filter((item) => item.status === 'resolved').length} Fixed</span>
             <span>{meetings.length} Meetings</span>
+            <span>{schools.length} Schools</span>
+            <span>{hospitals.length} Health Centers</span>
           </div>
         </div>
 
@@ -143,13 +157,57 @@ export default function GovtDashboard({ currentUser }) {
                 <p><strong>Location:</strong> {complaint.location}</p>
                 <p><strong>Description:</strong> {complaint.description}</p>
                 <p><strong>Reported:</strong> {complaint.date}</p>
+                <p>
+                  <strong>Fixed marker:</strong>{' '}
+                  {complaint.status === 'resolved' ? 'Fixed' : 'Needs action'}
+                </p>
+                {complaint.photo && (
+                  <img
+                    src={complaint.photo}
+                    alt={complaint.type}
+                    className="dashboard-photo"
+                  />
+                )}
                 <div className="status-actions">
                   <button onClick={() => updateComplaintStatus(complaint.id, 'pending')}>Pending</button>
-                  <button onClick={() => updateComplaintStatus(complaint.id, 'resolved')}>Resolved</button>
+                  <button onClick={() => updateComplaintStatus(complaint.id, 'resolved')}>Mark Fixed</button>
                   <button onClick={() => updateComplaintStatus(complaint.id, 'escalated')}>Escalated</button>
                 </div>
               </article>
             ))}
+          </div>
+        </section>
+
+        <section className="dashboard-section">
+          <h3>Town Information</h3>
+          <div className="town-info-grid">
+            <article className="dashboard-card">
+              <h4>Education</h4>
+              <p><strong>Total schools:</strong> {schools.length}</p>
+              <p><strong>Total seats:</strong> {schools.reduce((total, school) => total + Number(school.seats || 0), 0)}</p>
+              <div className="compact-list">
+                {schools.slice(0, 5).map((school) => (
+                  <span key={school.id}>{school.name}</span>
+                ))}
+              </div>
+            </article>
+
+            <article className="dashboard-card">
+              <h4>Healthcare</h4>
+              <p><strong>Health centers:</strong> {hospitals.length}</p>
+              <div className="compact-list">
+                {hospitals.map((hospital) => (
+                  <span key={hospital.id}>{hospital.name} - {hospital.address}</span>
+                ))}
+              </div>
+            </article>
+
+            <article className="dashboard-card">
+              <h4>Governance Snapshot</h4>
+              <p><strong>Open problems:</strong> {complaints.filter((item) => item.status !== 'resolved').length}</p>
+              <p><strong>Approved meetings:</strong> {meetings.filter((item) => item.status === 'approved').length}</p>
+              <p><strong>Completed meetings:</strong> {meetings.filter((item) => item.status === 'completed').length}</p>
+            </article>
           </div>
         </section>
 
