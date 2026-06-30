@@ -139,6 +139,27 @@
   color: #556b6b;
 }
 
+.complaint-status-note {
+  border-radius: 6px;
+  font-weight: 700;
+  padding: 10px 12px;
+}
+
+.complaint-status-note-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.complaint-status-note-resolved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.complaint-status-note-escalated {
+  background: #f8d7da;
+  color: #721c24;
+}
+
 .badge {
   display: inline-block;
   padding: 6px 14px;

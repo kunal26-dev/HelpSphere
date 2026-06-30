@@ -63,9 +63,6 @@ function App() {
               <li><Link to="/meeting">Town Meeting</Link></li>
               <li><Link to="/healthcare">Healthcare</Link></li>
               <li><Link to="/education">Education</Link></li>
-              {currentUser.role === 'official' && (
-                <li><Link to="/dashboard">Govt Dashboard</Link></li>
-              )}
             </ul>
 
             <div className="user-menu">
@@ -81,8 +78,23 @@ function App() {
         {/* Routes */}
         <main>
           <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Navigate to="/" replace />} />
+            <Route
+              path="/"
+              element={
+                currentUser.role === 'official'
+                  ? <Navigate to="/dashboard" replace />
+                  : <Home />
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <Navigate
+                  to={currentUser.role === 'official' ? '/dashboard' : '/'}
+                  replace
+                />
+              }
+            />
             <Route
               path="/signup"
               element={

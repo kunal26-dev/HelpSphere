@@ -83,11 +83,45 @@
 .dashboard-photo {
   aspect-ratio: 16 / 10;
   border: 1px solid #dce9e3;
-  border-radius: 8px;
+  border-radius: 6px;
   display: block;
-  margin-top: 12px;
   object-fit: cover;
   width: 100%;
+}
+
+.dashboard-photo-link {
+  color: #1b5e3f;
+  display: grid;
+  font-size: 13px;
+  font-weight: 700;
+  gap: 8px;
+  margin-top: 12px;
+  text-decoration: none;
+}
+
+.dashboard-photo-link:hover span {
+  text-decoration: underline;
+}
+
+.status-note {
+  border-radius: 6px;
+  font-weight: 700;
+  padding: 10px 12px;
+}
+
+.status-note-pending {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-note-resolved {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-note-escalated {
+  background: #f8d7da;
+  color: #721c24;
 }
 
 .town-info-grid {
@@ -129,6 +163,26 @@
 
 .status-actions button:hover {
   background: #cfe5dc;
+}
+
+.status-actions button.active.pending {
+  background: #ffe69c;
+  color: #856404;
+}
+
+.status-actions button.active.resolved {
+  background: #b8dfbb;
+  color: #155724;
+}
+
+.status-actions button.active.escalated {
+  background: #f1b5bb;
+  color: #721c24;
+}
+
+.status-actions button.active.approved {
+  background: #bce8f1;
+  color: #0c5460;
 }
 
 .status-badge.requested {

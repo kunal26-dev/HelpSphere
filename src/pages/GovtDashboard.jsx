@@ -18,6 +18,18 @@ async function readJsonResponse(response) {
   }
 }
 
+function getComplaintStatusMessage(status) {
+  if (status === 'resolved') {
+    return 'This problem has been marked fixed. The member can see that it is solved.'
+  }
+
+  if (status === 'escalated') {
+    return 'This problem has been escalated for higher-level action.'
+  }
+
+  return 'This problem is pending and still needs action.'
+}
+
 export default function GovtDashboard({ currentUser }) {
   const [complaints, setComplaints] = useState([])
   const [meetings, setMeetings] = useState([])
@@ -84,17 +96,29 @@ export default function GovtDashboard({ currentUser }) {
   }
 
   const updateComplaintStatus = async (id, status) => {
-    await updateStatus(`/api/complaints/${id}/status`, { status })
+    const updated = await updateStatus(`/api/complaints/${id}/status`, { status })
+
+    if (!updated) {
+      return
+    }
+
     setComplaints((items) => items.map((item) => (
       item.id === id ? { ...item, status } : item
     )))
+    setMessage(`Problem status changed to ${status}.`)
   }
 
   const updateMeetingStatus = async (id, status) => {
-    await updateStatus(`/api/meetings/${id}/status`, { status })
+    const updated = await updateStatus(`/api/meetings/${id}/status`, { status })
+
+    if (!updated) {
+      return
+    }
+
     setMeetings((items) => items.map((item) => (
       item.id === id ? { ...item, status } : item
     )))
+    setMessage(`Meeting status changed to ${status}.`)
   }
 
   const updateStatus = async (path, payload) => {
@@ -110,7 +134,10 @@ export default function GovtDashboard({ currentUser }) {
 
     if (!response.ok) {
       setMessage(data.message || 'Unable to update status')
+      return false
     }
+
+    return true
   }
 
   return (
@@ -157,21 +184,43 @@ export default function GovtDashboard({ currentUser }) {
                 <p><strong>Location:</strong> {complaint.location}</p>
                 <p><strong>Description:</strong> {complaint.description}</p>
                 <p><strong>Reported:</strong> {complaint.date}</p>
-                <p>
-                  <strong>Fixed marker:</strong>{' '}
-                  {complaint.status === 'resolved' ? 'Fixed' : 'Needs action'}
+                <p className={`status-note status-note-${complaint.status}`}>
+                  {getComplaintStatusMessage(complaint.status)}
                 </p>
                 {complaint.photo && (
-                  <img
-                    src={complaint.photo}
-                    alt={complaint.type}
-                    className="dashboard-photo"
-                  />
+                  <a
+                    href={complaint.photo}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="dashboard-photo-link"
+                  >
+                    <img
+                      src={complaint.photo}
+                      alt={complaint.type}
+                      className="dashboard-photo"
+                    />
+                    <span>Open image</span>
+                  </a>
                 )}
                 <div className="status-actions">
-                  <button onClick={() => updateComplaintStatus(complaint.id, 'pending')}>Pending</button>
-                  <button onClick={() => updateComplaintStatus(complaint.id, 'resolved')}>Mark Fixed</button>
-                  <button onClick={() => updateComplaintStatus(complaint.id, 'escalated')}>Escalated</button>
+                  <button
+                    className={complaint.status === 'pending' ? 'active pending' : ''}
+                    onClick={() => updateComplaintStatus(complaint.id, 'pending')}
+                  >
+                    Pending
+                  </button>
+                  <button
+                    className={complaint.status === 'resolved' ? 'active resolved' : ''}
+                    onClick={() => updateComplaintStatus(complaint.id, 'resolved')}
+                  >
+                    Mark Fixed
+                  </button>
+                  <button
+                    className={complaint.status === 'escalated' ? 'active escalated' : ''}
+                    onClick={() => updateComplaintStatus(complaint.id, 'escalated')}
+                  >
+                    Escalated
+                  </button>
                 </div>
               </article>
             ))}
@@ -232,10 +281,30 @@ export default function GovtDashboard({ currentUser }) {
                 <p><strong>Location:</strong> {meeting.location}</p>
                 <p><strong>Description:</strong> {meeting.description}</p>
                 <div className="status-actions">
-                  <button onClick={() => updateMeetingStatus(meeting.id, 'requested')}>Requested</button>
-                  <button onClick={() => updateMeetingStatus(meeting.id, 'approved')}>Approved</button>
-                  <button onClick={() => updateMeetingStatus(meeting.id, 'rejected')}>Rejected</button>
-                  <button onClick={() => updateMeetingStatus(meeting.id, 'completed')}>Completed</button>
+                  <button
+                    className={meeting.status === 'requested' ? 'active pending' : ''}
+                    onClick={() => updateMeetingStatus(meeting.id, 'requested')}
+                  >
+                    Requested
+                  </button>
+                  <button
+                    className={meeting.status === 'approved' ? 'active approved' : ''}
+                    onClick={() => updateMeetingStatus(meeting.id, 'approved')}
+                  >
+                    Approved
+                  </button>
+                  <button
+                    className={meeting.status === 'rejected' ? 'active escalated' : ''}
+                    onClick={() => updateMeetingStatus(meeting.id, 'rejected')}
+                  >
+                    Rejected
+                  </button>
+                  <button
+                    className={meeting.status === 'completed' ? 'active resolved' : ''}
+                    onClick={() => updateMeetingStatus(meeting.id, 'completed')}
+                  >
+                    Completed
+                  </button>
                 </div>
               </article>
             ))}

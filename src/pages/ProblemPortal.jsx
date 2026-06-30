@@ -7,6 +7,18 @@ async function readJsonResponse(response) {
   return text ? JSON.parse(text) : {}
 }
 
+function getComplaintStatusMessage(status) {
+  if (status === 'resolved') {
+    return 'Solved: government officials marked this problem fixed.'
+  }
+
+  if (status === 'escalated') {
+    return 'Escalated: this problem has been moved for higher-level action.'
+  }
+
+  return 'Pending: your problem is submitted and waiting for action.'
+}
+
 export default function ProblemPortal({ currentUser }) {
   const [complaints, setComplaints] = useState([])
   const [message, setMessage] = useState('')
@@ -152,6 +164,9 @@ export default function ProblemPortal({ currentUser }) {
                   <p><strong>Location:</strong> {complaint.location}</p>
                   <p><strong>Description:</strong> {complaint.description}</p>
                   <p><strong>Reported:</strong> {complaint.date}</p>
+                  <p className={`complaint-status-note complaint-status-note-${complaint.status}`}>
+                    {getComplaintStatusMessage(complaint.status)}
+                  </p>
                   {complaint.photo && (
                     <img src={complaint.photo} alt={complaint.type} className="photo-preview" />
                   )}
